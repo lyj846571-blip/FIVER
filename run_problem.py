@@ -177,18 +177,79 @@ def load_rows(args: argparse.Namespace) -> Iterable[Dict[str, Any]]:
     if args.problem:
         yield {"index": "0", "problem": args.problem, "answer": args.answer}
         return
-    if not args.input_jsonl:
-        raise RuntimeError("Supply either --problem or --input-jsonl.")
-    with Path(args.input_jsonl).open("r", encoding="utf-8") as handle:
+    supplied_inputs = [bool(args.input_json), bool(args.input_jsonl), bool(args.input_arrow)]
+    if sum(supplied_inputs) > 1:
+        raise RuntimeError("Supply only one of --input-json, --input-jsonl, or --input-arrow.")
+    if args.input_json:
+        yield from _load_json_rows(Path(args.input_json), args)
+        return
+    if args.input_jsonl:
+        yield from _load_jsonl_rows(Path(args.input_jsonl), args)
+        return
+    if args.input_arrow:
+        yield from _load_arrow_rows(Path(args.input_arrow), args)
+        return
+    raise RuntimeError("Supply --problem, --input-json, --input-jsonl, or --input-arrow.")
+
+
+def _row_from_item(item: Dict[str, Any], idx: int, args: argparse.Namespace) -> Dict[str, Any]:
+    return {
+        "index": item.get(args.index_key, idx),
+        "problem": str(item[args.problem_key]),
+        "answer": item.get(args.answer_key) if args.answer_key else None,
+    }
+
+
+def _load_jsonl_rows(path: Path, args: argparse.Namespace) -> Iterable[Dict[str, Any]]:
+    with path.open("r", encoding="utf-8") as handle:
         for idx, line in enumerate(handle):
             if args.limit is not None and idx >= args.limit:
                 break
+            if not line.strip():
+                continue
             item = json.loads(line)
-            yield {
-                "index": item.get(args.index_key, idx),
-                "problem": str(item[args.problem_key]),
-                "answer": item.get(args.answer_key) if args.answer_key else None,
-            }
+            if not isinstance(item, dict):
+                raise ValueError(f"JSONL row {idx} in {path} is not an object.")
+            yield _row_from_item(item, idx, args)
+
+
+def _load_json_rows(path: Path, args: argparse.Namespace) -> Iterable[Dict[str, Any]]:
+    payload = json.loads(path.read_text(encoding="utf-8"))
+    if isinstance(payload, list):
+        items = payload
+    elif isinstance(payload, dict):
+        if isinstance(payload.get("data"), list):
+            items = payload["data"]
+        elif isinstance(payload.get("test"), list):
+            items = payload["test"]
+        elif isinstance(payload.get("train"), list):
+            items = payload["train"]
+        else:
+            items = [payload]
+    else:
+        raise ValueError(f"Unsupported JSON input format in {path}.")
+    for idx, item in enumerate(items):
+        if args.limit is not None and idx >= args.limit:
+            break
+        if not isinstance(item, dict):
+            raise ValueError(f"JSON item {idx} in {path} is not an object.")
+        yield _row_from_item(item, idx, args)
+
+
+def _load_arrow_rows(path: Path, args: argparse.Namespace) -> Iterable[Dict[str, Any]]:
+    try:
+        import pyarrow.ipc as ipc
+    except ImportError as exc:
+        raise RuntimeError("Reading --input-arrow requires pyarrow. Install requirements.txt first.") from exc
+
+    with path.open("rb") as handle:
+        table = ipc.open_stream(handle).read_all()
+    for idx, item in enumerate(table.to_pylist()):
+        if args.limit is not None and idx >= args.limit:
+            break
+        if not isinstance(item, dict):
+            raise ValueError(f"Arrow item {idx} in {path} is not an object.")
+        yield _row_from_item(item, idx, args)
 
 
 def judge_answer(args: argparse.Namespace, prompt_dir: str, problem: str, prediction: str, ground_truth: str) -> str:
@@ -223,10 +284,12 @@ def _json_arg(value: Optional[str]) -> Dict[str, Any]:
 
 
 def build_parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(description="Run the math tool router on one problem or a JSONL dataset.")
+    parser = argparse.ArgumentParser(description="Run the math tool router on one problem or a JSON/JSONL/Arrow dataset.")
     parser.add_argument("--problem")
     parser.add_argument("--answer")
+    parser.add_argument("--input-json")
     parser.add_argument("--input-jsonl")
+    parser.add_argument("--input-arrow")
     parser.add_argument("--output-jsonl")
     parser.add_argument("--problem-key", default="problem")
     parser.add_argument("--answer-key", default="answer")

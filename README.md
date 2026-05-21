@@ -103,7 +103,7 @@ python run_problem.py \
 
 Add optional generation settings such as `--outer-temperature`, `--outer-top-p`, or `--seed` only when needed.
 
-## Run a JSONL Dataset
+## Run a Dataset
 
 ```bash
 python run_problem.py \
@@ -113,6 +113,20 @@ python run_problem.py \
   --output-jsonl outputs/results.jsonl \
   [the runtime arguments above]
 ```
+
+`run_problem.py` also accepts JSON and Arrow inputs, so bundled Hugging Face Arrow datasets can be evaluated directly without creating a converted file under `outputs/`:
+
+```bash
+python run_problem.py \
+  --input-arrow data/datasets/aime/default/0.0.0/563bb8404243c5f09de6ec262f2db674fe5bce9b/aime25-test.arrow \
+  --problem-key problem \
+  --answer-key answer \
+  --index-key id \
+  --output-jsonl outputs/aime25_results.jsonl \
+  [the runtime arguments above]
+```
+
+Use `outputs/` for run results only. Keep evaluation inputs under `data/` or pass a dataset path explicitly.
 
 ## Notes
 

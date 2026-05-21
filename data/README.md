@@ -10,6 +10,7 @@ This directory contains the datasets used by the public release.
 - `datasets/aime`: AIME dataset cache.
 
 These directories are stored in Hugging Face `datasets` disk/cache format where applicable.
+`run_problem.py` can read the included Arrow files directly with `--input-arrow`, so no pre-converted JSONL copy is required under `outputs/`.
 
 ## Router Training Data
 
