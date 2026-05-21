@@ -1,0 +1,17 @@
+Please autoformalize the following natural language problem statement in Lean4.
+Use the following theorem name:test
+
+Useful verified memories:
+{memory}
+
+Previously failed translation attempts for similar steps.
+Avoid repeating the same wrong formalization patterns and compiler/semantic errors:
+{bad_memory}
+
+Category-level failure reminders for this step type ({step_category}):
+{category_memory}
+
+Current natural language statement:
+{proof_step}
+
+Think before you provide the lean statement.

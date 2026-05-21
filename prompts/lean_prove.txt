@@ -1,0 +1,21 @@
+Complete the following Lean 4 code to prove the given theorem.
+End with Lean 4 code.
+
+# Natural language step:
+{proof_step}
+
+```lean4
+<header>
+{lean_statement}
+<body>
+```
+
+Previously failed proof attempts for similar steps.
+Do NOT repeat the same bad proof patterns or the same compiler errors:
+{prover_error_memory}
+
+Category-level failure reminders for this step type ({step_category}):
+{category_memory}
+
+Before producing the Lean 4 code to formally prove the given theorem,
+provide a detailed proof plan outlining the main proof steps and strategies.

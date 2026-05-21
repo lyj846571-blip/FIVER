@@ -1,0 +1,15 @@
+You need to do two tasks at once:
+1. Check whether the Lean4 statement has the same mathematical meaning as the original step.
+2. Classify the current step into one MATH-500 category.
+
+Allowed categories (closed set):
+{allowed_categories}
+
+Original step:
+{proof_step}
+
+Lean statement:
+{lean_statement}
+
+Return strict JSON only:
+{{"same_meaning":"yes|no","step_category":"<one allowed category>"}}
