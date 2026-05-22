@@ -17,27 +17,27 @@ data/router_training/step_verdict_grouped_final_complete__regraded.jsonl
 ```bash
 python train_router.py \
   --train-jsonl data/router_training/step_verdict_grouped_final_complete__regraded.jsonl \
-  --output-checkpoint router_models/router_model_retrained.pt \
+  --output-checkpoint <router_checkpoint_path> \
   --tool-names lean4,deepseek \
-  --val-ratio 0.15 \
-  --device auto \
-  --embedding-base-url "$ROUTER_EMBEDDING_BASE_URL" \
-  --embedding-api-key-env ROUTER_EMBEDDING_API_KEY \
-  --embedding-model "$ROUTER_EMBEDDING_MODEL" \
-  --specialty-dim 8 \
-  --cost-hidden-dim 64 \
-  --router-difficulty-epsilon "$ROUTER_DIFFICULTY_EPSILON" \
-  --epochs 40 \
-  --success-lr 0.01 \
-  --cost-lr 0.01 \
-  --batch-size 16 \
-  --weight-performance 0.8
+  --val-ratio <validation_ratio> \
+  --device <cpu_or_cuda_or_auto> \
+  --embedding-base-url <router_embedding_base_url> \
+  --embedding-api-key <router_embedding_api_key> \
+  --embedding-model <router_embedding_model> \
+  --specialty-dim <specialty_dim> \
+  --cost-hidden-dim <cost_hidden_dim> \
+  --router-difficulty-epsilon <difficulty_epsilon> \
+  --epochs <num_epochs> \
+  --success-lr <success_learning_rate> \
+  --cost-lr <cost_learning_rate> \
+  --batch-size <batch_size> \
+  --weight-performance <router_weight>
 ```
 
 This creates:
 
 ```text
-router_models/router_model_retrained.pt
+<router_checkpoint_path>
 ```
 
 ## Run Problem
@@ -45,51 +45,51 @@ router_models/router_model_retrained.pt
 ```bash
 python run_problem.py \
   --problem "Convert the point $(0,3)$ to polar coordinates." \
-  --outer-base-url "$OUTER_BASE_URL" \
-  --outer-api-key-env OUTER_API_KEY \
-  --outer-model "$OUTER_MODEL" \
-  --embedding-base-url "$ROUTER_EMBEDDING_BASE_URL" \
-  --embedding-api-key-env ROUTER_EMBEDDING_API_KEY \
-  --embedding-model "$ROUTER_EMBEDDING_MODEL" \
-  --memory-embedding-base-url "$MEMORY_EMBEDDING_BASE_URL" \
-  --memory-embedding-api-key-env MEMORY_EMBEDDING_API_KEY \
-  --memory-embedding-model "$MEMORY_EMBEDDING_MODEL" \
-  --router-model-path router_models/router_model_retrained.pt \
-  --weight-performance 0.8 \
-  --router-difficulty-epsilon "$ROUTER_DIFFICULTY_EPSILON" \
-  --max-steps 50 \
-  --memory-top-k 3 \
-  --deepseek-verifier-attempts 1 \
-  --deepseek-base-url "$DEEPSEEK_BASE_URL" \
-  --deepseek-api-key-env DEEPSEEK_API_KEY \
-  --deepseek-model "$DEEPSEEK_MODEL" \
-  --lean-formalizer-base-url "$LEAN_FORMALIZER_BASE_URL" \
-  --lean-formalizer-api-key-env LEAN_FORMALIZER_API_KEY \
-  --lean-formalizer-model "$LEAN_FORMALIZER_MODEL" \
-  --lean-backtranslate-base-url "$LEAN_BACKTRANSLATE_BASE_URL" \
-  --lean-backtranslate-api-key-env LEAN_BACKTRANSLATE_API_KEY \
-  --lean-backtranslate-model "$LEAN_BACKTRANSLATE_MODEL" \
-  --lean-prover-base-url "$LEAN_PROVER_BASE_URL" \
-  --lean-prover-api-key-env LEAN_PROVER_API_KEY \
-  --lean-prover-model "$LEAN_PROVER_MODEL" \
-  --lean-repl "$LEAN_REPL" \
-  --lean-lake-path "$LEAN_LAKE_PATH" \
-  --lean-project-root "$LEAN_PROJECT_ROOT" \
-  --lean-repl-timeout-s 300 \
-  --lean-translator-attempts 4 \
-  --lean-prover-attempts 4 \
-  --lean-inner-memory-top-k 2 \
-  --lean-outer-memory-top-k 1
+  --outer-base-url <outer_base_url> \
+  --outer-api-key <outer_api_key> \
+  --outer-model <outer_model> \
+  --embedding-base-url <router_embedding_base_url> \
+  --embedding-api-key <router_embedding_api_key> \
+  --embedding-model <router_embedding_model> \
+  --memory-embedding-base-url <memory_embedding_base_url> \
+  --memory-embedding-api-key <memory_embedding_api_key> \
+  --memory-embedding-model <memory_embedding_model> \
+  --router-model-path <router_checkpoint_path> \
+  --weight-performance <router_weight> \
+  --router-difficulty-epsilon <difficulty_epsilon> \
+  --max-steps <max_steps> \
+  --memory-top-k <memory_top_k> \
+  --deepseek-verifier-attempts <deepseek_verifier_attempts> \
+  --deepseek-base-url <deepseek_base_url> \
+  --deepseek-api-key <deepseek_api_key> \
+  --deepseek-model <deepseek_model> \
+  --lean-formalizer-base-url <lean_formalizer_base_url> \
+  --lean-formalizer-api-key <lean_formalizer_api_key> \
+  --lean-formalizer-model <lean_formalizer_model> \
+  --lean-backtranslate-base-url <lean_backtranslate_base_url> \
+  --lean-backtranslate-api-key <lean_backtranslate_api_key> \
+  --lean-backtranslate-model <lean_backtranslate_model> \
+  --lean-prover-base-url <lean_prover_base_url> \
+  --lean-prover-api-key <lean_prover_api_key> \
+  --lean-prover-model <lean_prover_model> \
+  --lean-repl <lean_repl_path> \
+  --lean-lake-path <lean_lake_path> \
+  --lean-project-root <lean_project_root> \
+  --lean-repl-timeout-s <lean_repl_timeout_seconds> \
+  --lean-translator-attempts <lean_translator_attempts> \
+  --lean-prover-attempts <lean_prover_attempts> \
+  --lean-inner-memory-top-k <lean_inner_memory_top_k> \
+  --lean-outer-memory-top-k <lean_outer_memory_top_k>
 ```
 
 For a dataset, use JSON, JSONL, or Arrow input:
 
 ```bash
 python run_problem.py \
-  --input-arrow data/datasets/aime/default/0.0.0/563bb8404243c5f09de6ec262f2db674fe5bce9b/aime25-test.arrow \
-  --problem-key problem \
-  --answer-key answer \
-  --index-key id \
-  --output-jsonl outputs/aime25_results.jsonl \
+  --input-arrow <dataset_arrow_path> \
+  --problem-key <problem_field> \
+  --answer-key <answer_field> \
+  --index-key <index_field> \
+  --output-jsonl <output_jsonl_path> \
   [the runtime arguments above]
 ```
