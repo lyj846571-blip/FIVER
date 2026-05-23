@@ -1,10 +1,10 @@
 Question:
-                    {problem}
-                
-                    Solving the problem step by step.
-                    Just when you reach a critical step, call the verification tool,If you can solve it
-                    yourself do not call the verification tool.
-                    If the tool result says CORRECT, continue from the verified step.
-                    If the tool result says INCORRECT, revise the previous reasoning before continuing.
-                    If the tool result says VERIFICATION FAILURE, self-check the step and continue carefully.
-                    If you get an answer, output: Final Answer: <answer> .
+{problem}
+
+Solving the problem step by step.
+Just when you reach a critical step, call the verification tool,If you can solve it
+yourself do not call the verification tool.
+If the tool result says CORRECT, continue from the verified step.
+If the tool result says INCORRECT, revise the previous reasoning before continuing.
+If the tool result says VERIFICATION FAILURE, self-check the step and continue carefully.
+If you get an answer, output: Final Answer: <answer> .
