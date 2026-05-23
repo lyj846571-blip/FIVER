@@ -8,10 +8,16 @@ pip install -r requirements.txt
 
 ## Train the Router
 
-This repository includes our constructed step-level router training dataset:
+Router training data:
 
 ```text
 data/router_training/fiver_router_training.jsonl
+```
+
+We also include a hand-crafted step annotation dataset:
+
+```text
+data/router_training/fiver_step_annotations.json
 ```
 
 ```bash
