@@ -8,15 +8,15 @@ pip install -r requirements.txt
 
 ## Train the Router
 
-The training set is:
+This repository includes our constructed step-level router training dataset:
 
 ```text
-data/router_training/step_verdict_grouped_final_complete__regraded.jsonl
+data/router_training/fiver_router_training.jsonl
 ```
 
 ```bash
 python train_router.py \
-  --train-jsonl data/router_training/step_verdict_grouped_final_complete__regraded.jsonl \
+  --train-jsonl data/router_training/fiver_router_training.jsonl \
   --output-checkpoint <router_checkpoint_path> \
   --tool-names lean4,deepseek \
   --val-ratio <validation_ratio> \
