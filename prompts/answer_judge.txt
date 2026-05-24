@@ -6,7 +6,7 @@ Step 2: If the Ground Truth does not appear in the Answer, inspect the Answer fo
 
 Step 3: Simplify or rewrite the selected candidate answer toward the Ground Truth, then judge whether they are mathematically equivalent. Do not reject a correct answer only because of term order, decimal vs fraction form, e^{{i\theta}} not being expanded, equivalent trigonometric or algebraic form, LaTeX formatting, whitespace, parentheses, renamed/reordered arbitrary constants such as C_1 and C_2, or reasonable rounded/approximate numeric forms.
 
-Step 4: Output only True or False. Output only True or False. Output only True or False.
+Step 4: Output only True or False.
 
 Answer:
 {answer}
