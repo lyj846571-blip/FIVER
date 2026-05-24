@@ -1,4 +1,4 @@
-# FIVER: An Adaptive Agent for Integrating Formal and Informal Verification in LLM Mathematical Reasoning
+# FIVER: Adaptive Fusion of Formal and Informal Verification for Mathematical Reasoning in LLMs
 
 ## Install
 
